@@ -60,15 +60,15 @@ public class SolrTest {
 
         SolrInputDocument doc = new SolrInputDocument();
         doc.addField("id", 2);
-        doc.addField("title", "Solr Input Documents 1");
+        doc.addField("title", "SolrInputDocuments 1");
         doc.addField("content", "this is SolrInputDocuments 1 content");
 
         docs.add(doc);
 
         doc = new SolrInputDocument();
         doc.addField("id", 3);
-        doc.addField("name", "Solr Input Documents 2");
-        doc.addField("manu", "this is SolrInputDocuments 3 content");
+        doc.addField("title", "SolrInputDocuments 2");
+        doc.addField("content", "this is SolrInputDocuments 3 content");
 
         docs.add(doc);
 
@@ -83,7 +83,7 @@ public class SolrTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        query("solr");
+        query("title:SolrInputDocuments 2");
     }
 
     /**
@@ -92,7 +92,8 @@ public class SolrTest {
     @Test
     public void testQuery() {
         String queryStr = "*:*";
-        SolrQuery params = new SolrQuery(queryStr);
+        SolrQuery params = new SolrQuery();
+        params.setQuery(queryStr);
         params.set("rows", 10);
         try {
             QueryResponse response = null;
@@ -113,19 +114,13 @@ public class SolrTest {
 
     public final void fail(Object o) {
 
-        System.out.println(o);
+        System.out.println(o.toString());
 
     }
     /**
 
      * <b>function:</b> 根据query参数查询索引
-
-     * @author hoojo
-
-     * @createDate 2011-10-21 上午10:06:39
-
      * @param query
-
      */
 
     public void query(String query) {
@@ -142,10 +137,8 @@ public class SolrTest {
 
             SolrDocumentList list = response.getResults();
 
-            for (int i = 0; i < list.size(); i++) {
-
-                fail(list.get(i));
-
+            for (SolrDocument doc : list) {
+                System.out.println("######### id : " + doc.get("id") + "  title : " + doc.get("title")+"  content : " + doc.get("content"));
             }
 
         } catch (SolrServerException e) {
@@ -155,5 +148,8 @@ public class SolrTest {
         }
 
     }
+
+
+
 
 }
